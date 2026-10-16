@@ -1,0 +1,6 @@
+/venv
+/django_cheems/__pycache__
+/django_cheems/__init__.py
+/django_cheems/asgi.py
+/django_cheems/settings.py
+/django_cheems/wsgi.py
