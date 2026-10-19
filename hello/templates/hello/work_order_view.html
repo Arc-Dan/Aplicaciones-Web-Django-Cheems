@@ -1,0 +1,32 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Órdenes de trabajo</title>
+        <link rel="stylesheet" href="{% static 'hello/css/styles.css' %}">
+    </head>
+    <body>
+        <h1>Consulta de órdenes de trabajo</h1>
+        <table class="table-work-order">
+            <!-- thead (Table Head) -->
+            <thead>
+                <!-- tr (table row) -->
+                <tr>
+                    <th>Título</th>
+                    <th>Descripción</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for work_order in work_orders %}
+                    <tr>
+                        <!-- td (Table Data) -->
+                        <td>{{ work_order.title }}</td>
+                        <td>{{ work_order.description }}</td>
+                        <td>{{ work_order.status.name }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </body>
+</html>

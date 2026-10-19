@@ -1,0 +1,35 @@
+body{
+    background-color: rgb(208, 207, 207);
+}
+h1{
+    color: brown;
+}
+
+.table-user{
+    width: 100%;
+}
+
+/* Descendientes de table-user que tengan th y se aplica a td de los desendientes */
+.table-user th, 
+.table-user td{
+    padding: 10px;
+    border: 1px solid #696969;
+    text-align: left;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.table-work-order th, 
+.table-work-order td{
+    padding: 10px;
+    border: 1px solid #696969;
+    text-align: left;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.table-work-order_history,
+.table-work-order_history td{
+    padding: 10px;
+    border: 1px solid #696969;
+    text-align: left;
+    font-family: Arial, Helvetica, sans-serif;
+}

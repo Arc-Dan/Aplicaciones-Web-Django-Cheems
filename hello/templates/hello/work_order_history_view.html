@@ -1,0 +1,32 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Historial de órdenes de trabajo</title>
+        <link rel="stylesheet" href="{% static 'hello/css/styles.css' %}">
+    </head>
+    <body>
+        <h1>Consulta de órdenes de trabajo</h1>
+        <table class="table-work-order_history">
+            <!-- thead (Table Head) -->
+            <thead>
+                <!-- tr (table row) -->
+                <tr>
+                    <th>Nombre</th>
+                    <th>Acción</th>
+                    <th>Historial de órdenes de trabajo</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for work_order_history in work_orders_history %}
+                    <tr>
+                        <!-- td (Table Data) -->
+                        <td>{{ work_order_history.id_user.name }}</td>
+                        <td>{{ work_order_history.action }}</td>
+                        <td>{{ work_order_history.id_work_order }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </body>
+</html>
