@@ -20,3 +20,8 @@ class User:
             User(row[0], row[1], row[2])
             for row in rows
         ]
+
+    @staticmethod
+    def create(name, account, profile):
+        with connection.cursor() as cursor:
+            cursor.execute('INSERT INTO user(name, account, profile) values(%s,%s,%s)', [name, account, profile])

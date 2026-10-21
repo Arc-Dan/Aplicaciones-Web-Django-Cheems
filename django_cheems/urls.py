@@ -19,8 +19,9 @@ from django.urls import path
 from hello import views
 
 urlpatterns = [
+    path('', views.index),
     path('admin/', admin.site.urls),
-    path('workorders/', views.work_orders, name='work_orders'),
-    path('history/', views.work_orders_history, name='work_orders_history'),
-    path('', views.index)
+    path('user/', views.users, name='users'),
+    path('workorder/', views.work_orders, name='work_orders'),
+    path('history/', views.work_orders_history, name='work_orders_history')
 ]
