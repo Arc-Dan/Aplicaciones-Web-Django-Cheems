@@ -20,3 +20,8 @@ class Work_order:
             Work_order(row[0], row[1], row[2])
             for row in rows
         ]
+
+    @staticmethod
+    def create(title, description, status):
+        with connection.cursor() as cursor:
+            cursor.execute('INSERT INTO work_order(title, description, status) VALUES(%s,%s,%s)', [title, description, status])

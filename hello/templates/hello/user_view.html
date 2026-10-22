@@ -6,56 +6,87 @@
         <link rel="stylesheet" href="{% static 'hello/css/styles.css' %}">
     </head>
     <body>
-        <h2>Crear Usuario</h2>
+        <h2>Administrar Usuario</h2>
         <form method="POST">
             <!-- Django lo necesita para poder enviar formularios con POST -->
             {% csrf_token %}
-            <div>
-                <label>Nombre</label>
-                <input type="text" name="name" required>
-            </div>
-            <br>
-            <div>
-                <label>Cuenta</label>
-                <input type="text" name="account" required>
-            </div>
-            <br>
-            <div>
-                <label>Perfil</label>
-                <select name="profile">
-                    <option value="1">Administrador</option>
-                    <option value="2">Operador</option>
-                </select>
-            </div>
-            <br>
-            <button type="submit">Guardar</button>
-        </form>
+    <input
+        type="hidden"
+        name="id"
+        value="{{ selected_user.id }}">
 
-        <hr>
+    <div>
+        <label>Nombre</label>
+        <input
+            type="text"
+            name="name"
+            value="{{ selected_user.name }}"
+            required>
+    </div>
+    <br>
+    <div>
+        <label>Cuenta</label>
+        <input
+            type="text"
+            name="account"
+            value="{{ selected_user.account }}"
+            required>
 
-        <h1>Consulta de Usuarios</h1>
-        <table class="table-user">
-            <!-- thead (Table Head) -->
-            <thead>
-                <!-- tr (table row) -->
+    </div>
+    <br>
+    <div>
+        <label>Perfil</label>
+        <select name="profile">
+            <option
+                value="1"
+                {% if selected_user.profile.value == 1 %}
+                    selected
+                {% endif %}>
+                Administrador
+            </option>
+
+            <option value="2"
+                {% if selected_user.profile.value == 2 %}
+                    selected
+                {% endif %}>
+                Operador
+            </option>
+        </select>
+    </div>
+    <br>
+    {% if selected_user %}
+        <button type="submit">Actualizar</button>
+        <a href="{% url 'users' %}"> <button type="button">Cancelar</button> </a>
+    {% else %}
+        <button type="submit">Crear</button>
+    {% endif %}
+</form>
+
+<hr>
+    <h1>Consulta de Usuarios</h1>
+    <table class="table-user">
+        <!-- thead (Table Head) -->
+        <thead>
+            <!-- tr (table row) -->
+            <tr>
+                <th>Nombre</th>
+                <th>Cuenta</th>
+                <th>Perfil</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
                 <tr>
-                    <th>Nombre</th>
-                    <th>Cuenta</th>
-                    <th>Perfil</th>
+                    <!-- td (Table Data) -->
+                    <td>{{ user.name }}</td>
+                    <td>{{ user.account }}</td>
+                    <td>{{ user.profile.name }}</td>
+                    <td><a href="{% url 'users' %}?edit={{ user.id }}">Editar</a></td>
                 </tr>
-            </thead>
-            <tbody>
-                {% for user in users %}
-                    <tr>
-                        <!-- td (Table Data) -->
-                        <td>{{ user.name }}</td>
-                        <td>{{ user.account }}</td>
-                        <td>{{ user.profile.name }}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        <br><br>
-        <script src="{% static 'hello/js/scripts.js' %}"></script>
+            {% endfor %}
+        </tbody>
+    </table>
+    <br><br>
     </body>
 </html>
