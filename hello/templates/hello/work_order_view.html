@@ -1,29 +1,57 @@
 {% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="es">
     <head>
+        <meta charset="UTF-8">
         <title>Órdenes de trabajo</title>
         <link rel="stylesheet" href="{% static 'hello/css/styles.css' %}">
     </head>
     <body>
+        <h2>Crear orden de trabajo</h2>
+        <form method="POST">
+            {% csrf_token %}
+            <div>
+                <label for="title">Título</label>
+                <input type="text" id="title" name="title" maxlength="60" required>
+            </div>
+            <br>
+            <div>
+                <label for="description">Descripción</label>
+                <textarea id="description" name="description" required></textarea>
+            </div>
+            <br>
+            <div>
+                <label for="id_user">Asignar a</label>
+                <select id="id_user" name="id_user" required>
+                    <option value="">Selecciona un usuario</option>
+                    {% for user in users %}
+                        <option value="{{ user.id }}">{{ user.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <br>
+            <button type="submit">Crear</button>
+        </form>
+        <hr>
         <h1>Consulta de órdenes de trabajo</h1>
-        <table class="table-work-order">
-            <!-- thead (Table Head) -->
+        <table class="table-user table-work-order">
             <thead>
-                <!-- tr (table row) -->
                 <tr>
                     <th>Título</th>
                     <th>Descripción</th>
-                    <th>Status</th>
+                    <th>Estado</th>
                 </tr>
             </thead>
             <tbody>
                 {% for work_order in work_orders %}
                     <tr>
-                        <!-- td (Table Data) -->
                         <td>{{ work_order.title }}</td>
                         <td>{{ work_order.description }}</td>
                         <td>{{ work_order.status.name }}</td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="3">No hay órdenes de trabajo.</td>
                     </tr>
                 {% endfor %}
             </tbody>

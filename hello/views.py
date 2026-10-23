@@ -58,8 +58,20 @@ def user_update(request):
 
 # Vistas de work_order
 def work_orders(request):
+    if request.method == 'POST':
+        Work_order.create(
+            title=request.POST.get('title'),
+            description=request.POST.get('description'),
+            id_user=request.POST.get('id_user'),
+        )
+        return redirect('work_orders')
+
     work_orders = Work_order.get_all()
-    return render(request, 'hello/work_order_view.html', {'work_orders': work_orders})
+    users = User.get_all()
+    return render(request, 'hello/work_order_view.html', {
+        'work_orders': work_orders,
+        'users': users,
+    })
 
 # Vistas de work_order_history
 def work_orders_history(request):
