@@ -1,5 +1,6 @@
 from django.db import connection
 from ..enums.status import Status
+from ..enums.action import Action
 
 
 class Work_order:
@@ -51,3 +52,28 @@ class Work_order:
             cursor.execute("""
                 UPDATE `work_order` SET title = %s, description = %s WHERE id = %s
             """, [title, description, id])
+
+    @staticmethod
+    def get_available():
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                SELECT id, title, description, status
+                FROM work_order
+                WHERE status = %s AND NOT EXISTS (
+                    SELECT 1 FROM work_order_history
+                    WHERE id_work_order = work_order.id AND action = %s
+                )
+            """, [Status.PENDIENTE.value, Action.CREAR.value])
+            rows = cursor.fetchall()
+
+        return [
+            Work_order(row[0], row[1], row[2], row[3])
+            for row in rows
+        ]
+
+    @staticmethod
+    def update_status(id, status):
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                UPDATE work_order SET status = %s WHERE id = %s
+            """, [status, id])

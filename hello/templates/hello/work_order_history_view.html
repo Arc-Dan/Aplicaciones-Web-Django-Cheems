@@ -12,33 +12,96 @@
         <main class="page">
             <div class="page-heading">
                 <h1>Historial de órdenes</h1>
-                <p>Consulta los movimientos registrados.</p>
+                <p>Asigna órdenes y registra cuando estén solucionadas.</p>
             </div>
-            <section class="card">
-                <div class="card-heading">
-                    <h2>Movimientos</h2>
-                </div>
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Nombre</th>
-                                <th>Acción</th>
-                                <th>Historial de órdenes de trabajo</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for work_order_history in work_orders_history %}
+            <div class="content-layout">
+                <section class="card">
+                    <div class="card-heading">
+                        <h2>Asignar orden</h2>
+                        <p>La orden seguirá pendiente hasta que se solucione.</p>
+                    </div>
+                    <form method="POST" class="form-body">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="create">
+                        <div class="form-field">
+                            <label for="id_user">Usuario</label>
+                            <select id="id_user" name="id_user" required>
+                                <option value="">Selecciona un usuario</option>
+                                {% for user in users %}
+                                    <option value="{{ user.id }}">{{ user.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-field">
+                            <label for="id_work_order">Orden de trabajo</label>
+                            <select id="id_work_order" name="id_work_order" required>
+                                <option value="">Selecciona una orden</option>
+                                {% for work_order in work_orders %}
+                                    <option value="{{ work_order.id }}">{{ work_order.title }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit">Asignar</button>
+                        </div>
+                        {% if not work_orders %}
+                            <p>No hay órdenes pendientes sin asignar.</p>
+                        {% endif %}
+                    </form>
+                </section>
+                <section class="card">
+                    <div class="card-heading">
+                        <h2>Movimientos</h2>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
                                 <tr>
-                                    <td>{{ work_order_history.id_user.name }}</td>
-                                    <td>{{ work_order_history.action }}</td>
-                                    <td>{{ work_order_history.id_work_order }}</td>
+                                    <th>Fecha</th>
+                                    <th>Usuario</th>
+                                    <th>Orden</th>
+                                    <th>Acción</th>
+                                    <th>Opciones</th>
                                 </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </section>
+                            </thead>
+                            <tbody>
+                                {% for history in work_orders_history %}
+                                    <tr>
+                                        <td>{{ history.date|date:"d/m/Y H:i" }}</td>
+                                        <td>{{ history.user_name }}</td>
+                                        <td>{{ history.order_title }}</td>
+                                        <td>
+                                            <span class="badge">
+                                                {% if history.action.value == 1 %}
+                                                    Creado
+                                                {% elif history.action.value == 2 %}
+                                                    Solucionado
+                                                {% else %}
+                                                    {{ history.action.name }}
+                                                {% endif %}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            {% if history.action.value == 1 and history.id_work_order in pending_ids %}
+                                                <form method="POST">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="action" value="solve">
+                                                    <input type="hidden" name="id" value="{{ history.id }}">
+                                                    <button type="submit">Solucionar</button>
+                                                </form>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% empty %}
+                                    <tr>
+                                        <td colspan="5" class="empty-state">No hay movimientos registrados.</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
         </main>
     </body>
 </html>
