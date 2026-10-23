@@ -1,6 +1,23 @@
-/venv
-/django_cheems/__pycache__
-/django_cheems/__init__.py
-/django_cheems/asgi.py
+# Caché y archivos compilados de Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+
+# Entornos virtuales y configuración privada
+/venv/
+/.venv/
+.env
+.env.*
+!.env.example
+!.env.sample
 /django_cheems/settings.py
-/django_cheems/wsgi.py
+
+# Base de datos local de Django
+*.sqlite3
+*.sqlite3-journal
+
+# Archivos de macOS
+.DS_Store
