@@ -1,7 +1,9 @@
 from django.shortcuts import redirect, render
+from django.http import HttpResponseBadRequest, HttpResponseNotFound
 from .entities.user import User
 from .entities.work_order import Work_order
 from .entities.work_order_history import Work_order_history
+from .enums.status import Status
 
 # Create your views here.
 def index(request):
@@ -59,6 +61,25 @@ def user_update(request):
 # Vistas de work_order
 def work_orders(request):
     if request.method == 'POST':
+        action = request.POST.get('action', 'create')
+        if action == 'update_status':
+            try:
+                order_id = int(request.POST.get('id'))
+                status = Status(int(request.POST.get('status')))
+            except (TypeError, ValueError):
+                return HttpResponseBadRequest('Orden o estado inválido.')
+
+            if order_id <= 0:
+                return HttpResponseBadRequest('Orden inválida.')
+
+            if not Work_order.update_status(order_id, status.value):
+                return HttpResponseNotFound('La orden no existe.')
+
+            return redirect('work_orders')
+
+        if action != 'create':
+            return HttpResponseBadRequest('Acción inválida.')
+
         Work_order.create(
             title=request.POST.get('title'),
             description=request.POST.get('description'),

@@ -31,3 +31,11 @@ class Work_order:
                 INSERT INTO `work_order` (title, description, status, id_user)
                 VALUES (%s, %s, %s, %s)
             """, [title, description, Status.PENDIENTE.value, id_user])
+
+    @staticmethod
+    def update_status(id, status):
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                UPDATE `work_order` SET status = %s WHERE id = %s
+            """, [status, id])
+            return cursor.rowcount

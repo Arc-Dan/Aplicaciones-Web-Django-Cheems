@@ -22,6 +22,7 @@
                     </div>
                     <form method="POST" class="form-body">
                         {% csrf_token %}
+                        <input type="hidden" name="action" value="create">
                         <div class="form-field">
                             <label for="title">Título</label>
                             <input type="text" id="title" name="title" maxlength="60" required>
@@ -64,9 +65,15 @@
                                         <td>{{ work_order.title }}</td>
                                         <td>{{ work_order.description }}</td>
                                         <td>
-                                            <span class="badge {% if work_order.status.value == 1 %}badge-pending{% endif %}">
-                                                {{ work_order.status.name }}
-                                            </span>
+                                            <form method="POST">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="action" value="update_status">
+                                                <input type="hidden" name="id" value="{{ work_order.id }}">
+                                                <select name="status" aria-label="Estado de {{ work_order.title }}" onchange="this.form.submit()">
+                                                    <option value="1" {% if work_order.status.value == 1 %}selected{% endif %}>Pendiente</option>
+                                                    <option value="2" {% if work_order.status.value == 2 %}selected{% endif %}>Concluido</option>
+                                                </select>
+                                            </form>
                                         </td>
                                     </tr>
                                 {% empty %}
