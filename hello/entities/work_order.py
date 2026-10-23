@@ -32,9 +32,22 @@ class Work_order:
             """, [title, description, Status.PENDIENTE.value])
 
     @staticmethod
-    def update_status(id, status):
+    def get_by_id(id):
         with connection.cursor() as cursor:
             cursor.execute("""
-                UPDATE `work_order` SET status = %s WHERE id = %s
-            """, [status, id])
-            return cursor.rowcount
+                SELECT id, title, description, status
+                FROM `work_order` WHERE id = %s
+            """, [id])
+            row = cursor.fetchone()
+
+        if row:
+            return Work_order(row[0], row[1], row[2], row[3])
+
+        return None
+
+    @staticmethod
+    def update(id, title, description):
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                UPDATE `work_order` SET title = %s, description = %s WHERE id = %s
+            """, [title, description, id])

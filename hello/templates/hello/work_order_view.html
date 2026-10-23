@@ -17,22 +17,27 @@
             <div class="content-layout">
                 <section class="card">
                     <div class="card-heading">
-                        <h2>Crear orden</h2>
+                        <h2>{% if selected_work_order %}Editar orden{% else %}Crear orden{% endif %}</h2>
                         <p>Agrega el título y la descripción.</p>
                     </div>
                     <form method="POST" class="form-body">
                         {% csrf_token %}
-                        <input type="hidden" name="action" value="create">
+                        <input type="hidden" name="id" value="{{ selected_work_order.id }}">
                         <div class="form-field">
                             <label for="title">Título</label>
-                            <input type="text" id="title" name="title" maxlength="60" required>
+                            <input type="text" id="title" name="title" value="{{ selected_work_order.title }}" maxlength="60" required>
                         </div>
                         <div class="form-field">
                             <label for="description">Descripción</label>
-                            <textarea id="description" name="description" required></textarea>
+                            <textarea id="description" name="description" required>{{ selected_work_order.description }}</textarea>
                         </div>
                         <div class="form-actions">
-                            <button type="submit">Crear orden</button>
+                            {% if selected_work_order %}
+                                <button type="submit">Actualizar</button>
+                                <a href="{% url 'work_orders' %}">Cancelar</a>
+                            {% else %}
+                                <button type="submit">Crear orden</button>
+                            {% endif %}
                         </div>
                     </form>
                 </section>
@@ -48,6 +53,7 @@
                                     <th>Título</th>
                                     <th>Descripción</th>
                                     <th>Estado</th>
+                                    <th>Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -56,20 +62,15 @@
                                         <td>{{ work_order.title }}</td>
                                         <td>{{ work_order.description }}</td>
                                         <td>
-                                            <form method="POST">
-                                                {% csrf_token %}
-                                                <input type="hidden" name="action" value="update_status">
-                                                <input type="hidden" name="id" value="{{ work_order.id }}">
-                                                <select name="status" aria-label="Estado de {{ work_order.title }}" onchange="this.form.submit()">
-                                                    <option value="1" {% if work_order.status.value == 1 %}selected{% endif %}>Pendiente</option>
-                                                    <option value="2" {% if work_order.status.value == 2 %}selected{% endif %}>Concluido</option>
-                                                </select>
-                                            </form>
+                                            <span class="badge {% if work_order.status.value == 1 %}badge-pending{% endif %}">
+                                                {{ work_order.status.name }}
+                                            </span>
                                         </td>
+                                        <td><a href="{% url 'work_orders' %}?edit={{ work_order.id }}">Editar</a></td>
                                     </tr>
                                 {% empty %}
                                     <tr>
-                                        <td colspan="3" class="empty-state">No hay órdenes de trabajo.</td>
+                                        <td colspan="4" class="empty-state">No hay órdenes de trabajo.</td>
                                     </tr>
                                 {% endfor %}
                             </tbody>
