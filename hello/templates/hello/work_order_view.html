@@ -18,7 +18,7 @@
                 <section class="card">
                     <div class="card-heading">
                         <h2>Crear orden</h2>
-                        <p>Agrega los detalles y asigna un responsable.</p>
+                        <p>Agrega el título y la descripción.</p>
                     </div>
                     <form method="POST" class="form-body">
                         {% csrf_token %}
@@ -30,15 +30,6 @@
                         <div class="form-field">
                             <label for="description">Descripción</label>
                             <textarea id="description" name="description" required></textarea>
-                        </div>
-                        <div class="form-field">
-                            <label for="id_user">Asignar a</label>
-                            <select id="id_user" name="id_user" required>
-                                <option value="">Selecciona un usuario</option>
-                                {% for user in users %}
-                                    <option value="{{ user.id }}">{{ user.name }}</option>
-                                {% endfor %}
-                            </select>
                         </div>
                         <div class="form-actions">
                             <button type="submit">Crear orden</button>

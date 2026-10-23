@@ -83,15 +83,12 @@ def work_orders(request):
         Work_order.create(
             title=request.POST.get('title'),
             description=request.POST.get('description'),
-            id_user=request.POST.get('id_user'),
         )
         return redirect('work_orders')
 
     work_orders = Work_order.get_all()
-    users = User.get_all()
     return render(request, 'hello/work_order_view.html', {
         'work_orders': work_orders,
-        'users': users,
     })
 
 # Vistas de work_order_history
