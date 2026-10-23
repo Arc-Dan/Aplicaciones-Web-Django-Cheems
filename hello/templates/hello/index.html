@@ -1,92 +1,85 @@
 {% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="es">
     <head>
-        <title>Órdenes de trabajo</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Inicio · Cheems</title>
         <link rel="stylesheet" href="{% static 'hello/css/styles.css' %}">
     </head>
     <body>
-        <h2>Administrar Usuario</h2>
-        <form method="POST">
-            <!-- Django lo necesita para poder enviar formularios con POST -->
-            {% csrf_token %}
-    <input
-        type="hidden"
-        name="id"
-        value="{{ selected_user.id }}">
-
-    <div>
-        <label>Nombre</label>
-        <input
-            type="text"
-            name="name"
-            value="{{ selected_user.name }}"
-            required>
-    </div>
-    <br>
-    <div>
-        <label>Cuenta</label>
-        <input
-            type="text"
-            name="account"
-            value="{{ selected_user.account }}"
-            required>
-
-    </div>
-    <br>
-    <div>
-        <label>Perfil</label>
-        <select name="profile">
-            <option
-                value="1"
-                {% if selected_user.profile.value == 1 %}
-                    selected
-                {% endif %}>
-                Administrador
-            </option>
-
-            <option value="2"
-                {% if selected_user.profile.value == 2 %}
-                    selected
-                {% endif %}>
-                Operador
-            </option>
-        </select>
-    </div>
-    <br>
-    {% if selected_user %}
-        <button type="submit">Actualizar</button>
-        <a href="{% url 'users' %}"> <button type="button">Cancelar</button> </a>
-    {% else %}
-        <button type="submit">Crear</button>
-    {% endif %}
-</form>
-
-<hr>
-    <h1>Consulta de Usuarios</h1>
-    <table class="table-user">
-        <!-- thead (Table Head) -->
-        <thead>
-            <!-- tr (table row) -->
-            <tr>
-                <th>Nombre</th>
-                <th>Cuenta</th>
-                <th>Perfil</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for user in users %}
-                <tr>
-                    <!-- td (Table Data) -->
-                    <td>{{ user.name }}</td>
-                    <td>{{ user.account }}</td>
-                    <td>{{ user.profile.name }}</td>
-                    <td><a href="{% url 'users' %}?edit={{ user.id }}">Editar</a></td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <br><br>
+        {% include 'hello/navbar.html' %}
+        <main class="page">
+            <div class="page-heading">
+                <h1>Usuarios</h1>
+                <p>Administra los usuarios y sus perfiles.</p>
+            </div>
+            <div class="content-layout">
+                <section class="card">
+                    <div class="card-heading">
+                        <h2>{% if selected_user %}Editar usuario{% else %}Crear usuario{% endif %}</h2>
+                    </div>
+                    <form method="POST" class="form-body">
+                        {% csrf_token %}
+                        <input type="hidden" name="id" value="{{ selected_user.id }}">
+                        <div class="form-field">
+                            <label for="name">Nombre</label>
+                            <input type="text" id="name" name="name" value="{{ selected_user.name }}" required>
+                        </div>
+                        <div class="form-field">
+                            <label for="account">Cuenta</label>
+                            <input type="text" id="account" name="account" value="{{ selected_user.account }}" required>
+                        </div>
+                        <div class="form-field">
+                            <label for="profile">Perfil</label>
+                            <select id="profile" name="profile">
+                                <option value="1" {% if selected_user.profile.value == 1 %}selected{% endif %}>Administrador</option>
+                                <option value="2" {% if selected_user.profile.value == 2 %}selected{% endif %}>Operador</option>
+                            </select>
+                        </div>
+                        <div class="form-actions">
+                            {% if selected_user %}
+                                <button type="submit">Actualizar</button>
+                                <a href="{% url 'users' %}">Cancelar</a>
+                            {% else %}
+                                <button type="submit">Crear usuario</button>
+                            {% endif %}
+                        </div>
+                    </form>
+                </section>
+                <section class="card">
+                    <div class="card-heading">
+                        <h2>Todos los usuarios</h2>
+                        <p>{{ users|length }} usuarios registrados</p>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Cuenta</th>
+                                    <th>Perfil</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for user in users %}
+                                    <tr>
+                                        <td>{{ user.name }}</td>
+                                        <td>{{ user.account }}</td>
+                                        <td><span class="badge">{{ user.profile.name }}</span></td>
+                                        <td><a href="{% url 'users' %}?edit={{ user.id }}">Editar</a></td>
+                                    </tr>
+                                {% empty %}
+                                    <tr>
+                                        <td colspan="4" class="empty-state">No hay usuarios registrados.</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+        </main>
     </body>
 </html>

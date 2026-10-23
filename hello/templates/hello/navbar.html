@@ -1,0 +1,10 @@
+<header class="site-header">
+    <div class="header-content">
+        <a class="brand" href="/">cheems<span>Espacio de trabajo</span></a>
+        <nav aria-label="Navegación principal">
+            <a href="{% url 'users' %}" {% if request.path == '/user/' or request.path == '/' %}aria-current="page"{% endif %}>Usuarios</a>
+            <a href="{% url 'work_orders' %}" {% if request.path == '/workorder/' %}aria-current="page"{% endif %}>Órdenes de trabajo</a>
+            <a href="{% url 'work_orders_history' %}" {% if request.path == '/history/' %}aria-current="page"{% endif %}>Historial</a>
+        </nav>
+    </div>
+</header>

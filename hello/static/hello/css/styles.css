@@ -1,35 +1,253 @@
-body{
-    background-color: rgb(208, 207, 207);
-}
-h1{
-    color: brown;
+* {
+    box-sizing: border-box;
 }
 
-.table-user{
+body {
+    margin: 0;
+    background: #f6f7f4;
+    color: #202c29;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+a {
+    color: #28765c;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.site-header {
+    background: #ffffff;
+    border-bottom: 1px solid #e6ebe6;
+}
+
+.header-content {
+    max-width: 1280px;
+    margin: auto;
+    padding: 24px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+}
+
+.brand {
+    font-size: 26px;
+    font-weight: bold;
+    line-height: 1.2;
+}
+
+.brand span {
+    display: block;
+    margin-top: 5px;
+    color: #6e7974;
+    font-size: 11px;
+    font-weight: normal;
+}
+
+nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+nav a {
+    padding: 10px 14px;
+    border-radius: 8px;
+    color: #6e7974;
+}
+
+nav a:hover,
+nav a[aria-current="page"] {
+    background: #eaf3ed;
+    color: #28765c;
+    text-decoration: none;
+}
+
+.page {
+    max-width: 1280px;
+    margin: auto;
+    padding: 40px 32px;
+}
+
+.page-heading {
+    margin-bottom: 28px;
+}
+
+h1 {
+    margin: 0 0 8px;
+    font-size: 32px;
+    line-height: 1.3;
+}
+
+h2 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.page-heading p,
+.card-heading p {
+    margin: 6px 0 0;
+    color: #6e7974;
+}
+
+.content-layout {
+    display: grid;
+    grid-template-columns: 320px minmax(0, 1fr);
+    gap: 24px;
+    align-items: start;
+}
+
+.card {
+    min-width: 0;
+    overflow: hidden;
+    border: 1px solid #e6ebe6;
+    border-radius: 14px;
+    background: #ffffff;
+}
+
+.card-heading {
+    padding: 22px 24px;
+    border-bottom: 1px solid #e6ebe6;
+}
+
+.form-body {
+    padding: 24px;
+}
+
+.form-field {
+    margin-bottom: 18px;
+}
+
+label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+input,
+select,
+textarea {
     width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #dce3dc;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #202c29;
+    font: inherit;
 }
 
-/* Descendientes de table-user que tengan th y se aplica a td de los desendientes */
-.table-user th, 
-.table-user td{
-    padding: 10px;
-    border: 1px solid #696969;
-    text-align: left;
-    font-family: Arial, Helvetica, sans-serif;
+textarea {
+    min-height: 110px;
+    resize: vertical;
 }
 
-.table-work-order th, 
-.table-work-order td{
-    padding: 10px;
-    border: 1px solid #696969;
-    text-align: left;
-    font-family: Arial, Helvetica, sans-serif;
+input:focus,
+select:focus,
+textarea:focus {
+    outline: 2px solid #28765c;
+    outline-offset: 2px;
 }
 
-.table-work-order_history,
-.table-work-order_history td{
-    padding: 10px;
-    border: 1px solid #696969;
+.form-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: 24px;
+}
+
+button {
+    padding: 11px 18px;
+    border: none;
+    border-radius: 8px;
+    background: #28765c;
+    color: #ffffff;
+    font: inherit;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #1e6049;
+}
+
+.table-container {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
     text-align: left;
-    font-family: Arial, Helvetica, sans-serif;
+}
+
+th {
+    padding: 14px 24px;
+    background: #fafbf8;
+    color: #6e7974;
+    font-size: 12px;
+    font-weight: normal;
+    white-space: nowrap;
+}
+
+td {
+    padding: 18px 24px;
+    border-top: 1px solid #eef1ec;
+    overflow-wrap: anywhere;
+}
+
+tbody tr:hover {
+    background: #fafbf8;
+}
+
+.badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 6px;
+    background: #eaf3ed;
+    color: #28765c;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.badge-pending {
+    background: #fcf3df;
+    color: #896414;
+}
+
+.empty-state {
+    padding: 36px 24px;
+    color: #6e7974;
+    text-align: center;
+}
+
+@media (max-width: 900px) {
+    .content-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+    .header-content {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 20px;
+    }
+
+    .page {
+        padding: 28px 16px;
+    }
+
+    h1 {
+        font-size: 26px;
+    }
+
+    th,
+    td {
+        padding: 14px 16px;
+    }
 }

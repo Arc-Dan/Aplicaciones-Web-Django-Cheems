@@ -3,58 +3,82 @@
 <html lang="es">
     <head>
         <meta charset="UTF-8">
-        <title>Órdenes de trabajo</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Órdenes de trabajo · Cheems</title>
         <link rel="stylesheet" href="{% static 'hello/css/styles.css' %}">
     </head>
     <body>
-        <h2>Crear orden de trabajo</h2>
-        <form method="POST">
-            {% csrf_token %}
-            <div>
-                <label for="title">Título</label>
-                <input type="text" id="title" name="title" maxlength="60" required>
+        {% include 'hello/navbar.html' %}
+        <main class="page">
+            <div class="page-heading">
+                <h1>Órdenes de trabajo</h1>
+                <p>Crea tareas y consulta su estado.</p>
             </div>
-            <br>
-            <div>
-                <label for="description">Descripción</label>
-                <textarea id="description" name="description" required></textarea>
+            <div class="content-layout">
+                <section class="card">
+                    <div class="card-heading">
+                        <h2>Crear orden</h2>
+                        <p>Agrega los detalles y asigna un responsable.</p>
+                    </div>
+                    <form method="POST" class="form-body">
+                        {% csrf_token %}
+                        <div class="form-field">
+                            <label for="title">Título</label>
+                            <input type="text" id="title" name="title" maxlength="60" required>
+                        </div>
+                        <div class="form-field">
+                            <label for="description">Descripción</label>
+                            <textarea id="description" name="description" required></textarea>
+                        </div>
+                        <div class="form-field">
+                            <label for="id_user">Asignar a</label>
+                            <select id="id_user" name="id_user" required>
+                                <option value="">Selecciona un usuario</option>
+                                {% for user in users %}
+                                    <option value="{{ user.id }}">{{ user.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit">Crear orden</button>
+                        </div>
+                    </form>
+                </section>
+                <section class="card">
+                    <div class="card-heading">
+                        <h2>Todas las órdenes</h2>
+                        <p>{{ work_orders|length }} órdenes registradas</p>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Título</th>
+                                    <th>Descripción</th>
+                                    <th>Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for work_order in work_orders %}
+                                    <tr>
+                                        <td>{{ work_order.title }}</td>
+                                        <td>{{ work_order.description }}</td>
+                                        <td>
+                                            <span class="badge {% if work_order.status.value == 1 %}badge-pending{% endif %}">
+                                                {{ work_order.status.name }}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                {% empty %}
+                                    <tr>
+                                        <td colspan="3" class="empty-state">No hay órdenes de trabajo.</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
             </div>
-            <br>
-            <div>
-                <label for="id_user">Asignar a</label>
-                <select id="id_user" name="id_user" required>
-                    <option value="">Selecciona un usuario</option>
-                    {% for user in users %}
-                        <option value="{{ user.id }}">{{ user.name }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <br>
-            <button type="submit">Crear</button>
-        </form>
-        <hr>
-        <h1>Consulta de órdenes de trabajo</h1>
-        <table class="table-user table-work-order">
-            <thead>
-                <tr>
-                    <th>Título</th>
-                    <th>Descripción</th>
-                    <th>Estado</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for work_order in work_orders %}
-                    <tr>
-                        <td>{{ work_order.title }}</td>
-                        <td>{{ work_order.description }}</td>
-                        <td>{{ work_order.status.name }}</td>
-                    </tr>
-                {% empty %}
-                    <tr>
-                        <td colspan="3">No hay órdenes de trabajo.</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        </main>
     </body>
 </html>
